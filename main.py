@@ -7,7 +7,7 @@ directory = 'res'
 separator = os.path.sep
 
 
-def connect(host, user, passw, database):
+def connectPostgres(host, user, passw, database):
     engine = create_engine(f"postgresql+psycopg2://{user}:{passw}@{host}:5432/{database}")
     return engine.connect()
 
@@ -87,6 +87,6 @@ def integration(filename):
         print("File not complient")
 
 
-conn = connect("localhost", "guest", "tseug", "postgres")
+conn = connectPostgres("localhost", "guest", "tseug", "postgres")
 for filename in os.listdir(directory):
     integration(filename)
