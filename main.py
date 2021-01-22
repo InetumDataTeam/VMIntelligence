@@ -3,15 +3,17 @@ import pandas as pd
 from sqlalchemy import text
 from sqlalchemy import create_engine
 import warnings
+
 warnings.filterwarnings("ignore")
 directory = 'res'
 separator = os.path.sep
 
-#TDD
-#Exception : integration
-#Connection : connectPostgres
-#Verifier dim avec es trucs pas vides : add_CP
-#container docker pour les tests
+
+# TDD
+# Exception : integration
+# Connection : connectPostgres
+# Verifier dim avec es trucs pas vides : add_CP
+# container docker pour les tests
 def connectPostgres(host, user, passw, database):
     engine = create_engine(f"postgresql+psycopg2://{user}:{passw}@{host}:5432/{database}")
     return engine.connect()
@@ -19,8 +21,8 @@ def connectPostgres(host, user, passw, database):
 
 def insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
     print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
-    #if not CoutLicenceMS :
-     #   CoutLicenceMS = 0
+    # if not CoutLicenceMS :
+    #   CoutLicenceMS = 0
 
     sql = f"insert into dimension_syges (client, costcenter, syges) values (:Client, :CostCenter, :SYGES) ON CONFLICT(client, costcenter, syges) " \
           f"DO UPDATE SET client=excluded.client RETURNING idsyges"
@@ -75,11 +77,11 @@ def integration(filename):
         for line in dict.get("data"):
             ProjetAzureDevops, VM, Projet, CodeSyges, CostCenter, Client, date, cout, CP = line
             hebergeur = "Azure"
-            typeVM = "ProjetAzureDevops" if ProjetAzureDevops else "VM"
+            typeVM = "ProjetAzureDevops" if not str(ProjetAzureDevops) == "nan" else "VM"
             date = date + "-01"
-            print(VM,ProjetAzureDevops)
-            VM = VM if not str(VM)=="nan" else ProjetAzureDevops
-            print(VM)
+            print(VM, ProjetAzureDevops)
+            VM = VM if not str(VM) == "nan" else ProjetAzureDevops
+            print(typeVM)
             insertion(VM, CoutLicenceMS, CodeSyges, Client, cout, Projet, CP, CostCenter, hebergeur, typeVM, date)
 
     elif "OCEANET" and ".xlsm" in filename and ".xlsm" in filename:
