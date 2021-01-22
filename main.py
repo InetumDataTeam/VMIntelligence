@@ -2,18 +2,25 @@ import os
 import pandas as pd
 from sqlalchemy import text
 from sqlalchemy import create_engine
-
+import warnings
+warnings.filterwarnings("ignore")
 directory = 'res'
 separator = os.path.sep
 
-
+#TDD
+#Exception : integration
+#Connection : connectPostgres
+#Verifier dim avec es trucs pas vides : add_CP
+#container docker pour les tests
 def connectPostgres(host, user, passw, database):
     engine = create_engine(f"postgresql+psycopg2://{user}:{passw}@{host}:5432/{database}")
     return engine.connect()
 
 
 def insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
-    # print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+    print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+    #if not CoutLicenceMS :
+     #   CoutLicenceMS = 0
 
     sql = f"insert into dimension_syges (client, costcenter, syges) values (:Client, :CostCenter, :SYGES) ON CONFLICT(client, costcenter, syges) " \
           f"DO UPDATE SET client=excluded.client RETURNING idsyges"
@@ -81,12 +88,15 @@ def integration(filename):
         date = filename.split("OCEANET ")[1].replace(".xlsm", "") + "-01"
         for line in dict.get("data"):
             VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter = line
-            insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+            if VM != "Total" :
+                insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+            else :
+                break
             # TODO verif si ya pas de 'nan'
     else:
         print("File not complient")
 
 
-conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+conn = connectPostgres("localhost", "me", "secret", "mydb")
 for filename in os.listdir(directory):
     integration(filename)
