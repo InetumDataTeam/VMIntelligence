@@ -102,6 +102,8 @@ def integration(filename):
         print("File not complient")
 
 
-conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+#conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+conn = connectPostgres("localhost", "me", "secret", "mydb")
+
 for filename in os.listdir(directory):
     integration(filename)
