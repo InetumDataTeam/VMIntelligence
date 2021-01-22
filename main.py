@@ -77,6 +77,9 @@ def integration(filename):
             hebergeur = "Azure"
             typeVM = "ProjetAzureDevops" if ProjetAzureDevops else "VM"
             date = date + "-01"
+            print(VM,ProjetAzureDevops)
+            VM = VM if not str(VM)=="nan" else ProjetAzureDevops
+            print(VM)
             insertion(VM, CoutLicenceMS, CodeSyges, Client, cout, Projet, CP, CostCenter, hebergeur, typeVM, date)
 
     elif "OCEANET" and ".xlsm" in filename and ".xlsm" in filename:
@@ -88,15 +91,15 @@ def integration(filename):
         date = filename.split("OCEANET ")[1].replace(".xlsm", "") + "-01"
         for line in dict.get("data"):
             VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter = line
-            if VM != "Total" :
+            if VM != "Total":
                 insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
-            else :
+            else:
                 break
             # TODO verif si ya pas de 'nan'
     else:
         print("File not complient")
 
 
-conn = connectPostgres("localhost", "me", "secret", "mydb")
+conn = connectPostgres("localhost", "guest", "tseug", "postgres")
 for filename in os.listdir(directory):
     integration(filename)
