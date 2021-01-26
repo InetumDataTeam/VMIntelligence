@@ -3,6 +3,7 @@ import pandas as pd
 from sqlalchemy import text
 from sqlalchemy import create_engine
 import warnings
+import pytest
 
 warnings.filterwarnings("ignore")
 directory = 'res'
@@ -14,12 +15,13 @@ separator = os.path.sep
 # Connection : connectPostgres
 # Verifier dim avec es trucs pas vides : add_CP
 # container docker pour les tests
+
 def connectPostgres(host, user, passw, database):
     engine = create_engine(f"postgresql+psycopg2://{user}:{passw}@{host}:5432/{database}")
-    return engine.connect()
+    return engine
 
 
-def insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
+def insertion(conn, VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
     print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
     # if not CoutLicenceMS :
     #   CoutLicenceMS = 0
@@ -53,7 +55,7 @@ def insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCent
     conn.execute(text(sql), [{"date": date, "CoutGlobal": CoutGlobal or None, "CoutLicenceMS": CoutLicenceMS or None, "idprojetvm": idprojetvm}])
 
 
-def add_CP_Azure(df):
+def add_CP_Azure(df, filename):
     read_file_projets = pd.read_excel(directory + separator + filename, sheet_name='Projets', usecols=['NomProj', 'CP'])
 
     df.insert(8, "CP", "Sans CP")
@@ -65,11 +67,11 @@ def add_CP_Azure(df):
     return df
 
 
-def integration(filename):
+def integration(filename, conn):
     if "Azure" in filename and ".xlsm" in filename:
         read_file = pd.read_excel(directory + separator + filename, sheet_name='VMAzure-Env-Projet',
                                   usecols=['VM', 'Projet AzureDevOps', 'Projet', 'Code SYGES', 'Cost Center', 'Client', 'Mois', 'Coût'])
-        read_file = add_CP_Azure(read_file)
+        read_file = add_CP_Azure(read_file, filename)
         dict = read_file.to_dict(orient='split')
 
         CoutLicenceMS = ""
@@ -82,7 +84,7 @@ def integration(filename):
             print(VM, ProjetAzureDevops)
             VM = VM if not str(VM) == "nan" else ProjetAzureDevops
             print(typeVM)
-            insertion(VM, CoutLicenceMS, CodeSyges, Client, cout, Projet, CP, CostCenter, hebergeur, typeVM, date)
+            insertion(conn, VM, CoutLicenceMS, CodeSyges, Client, cout, Projet, CP, CostCenter, hebergeur, typeVM, date)
 
     elif "OCEANET" and ".xlsm" in filename and ".xlsm" in filename:
         read_file = pd.read_excel(directory + separator + filename, sheet_name='VMEnvProjet',
@@ -101,9 +103,8 @@ def integration(filename):
     else:
         print("File not complient")
 
-
-#conn = connectPostgres("localhost", "guest", "tseug", "postgres")
-conn = connectPostgres("localhost", "me", "secret", "mydb")
-
-for filename in os.listdir(directory):
-    integration(filename)
+# conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+# conn = connectPostgres("localhost", "me", "secret", "mydb")
+#
+# for filename in os.listdir(directory):
+#     integration(filename)
