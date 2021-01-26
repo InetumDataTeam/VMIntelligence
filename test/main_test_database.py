@@ -27,7 +27,7 @@ def setup_database(postgresql_my):
 def dataset(setup_database):
     session = setup_database
 
-    file = open("res/postgres.sql")
+    file = open("../res/postgres.sql")
     query = text(file.read())
 
     session.execute(query)
