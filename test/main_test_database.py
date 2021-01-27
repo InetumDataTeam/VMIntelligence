@@ -5,7 +5,6 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.declarative import declarative_base
-
 import main
 
 socket_dir = tempfile.TemporaryDirectory()

@@ -1,11 +1,18 @@
-class SourceError(Exception) :
-    def __init__(self, message, errors):
-        super().__init__(message)
+class SourceError(Exception):
+    pass
 
-class TransformError(Exception) :
-    def __init__(self, message, errors):
-        super().__init__(message)
 
-class SerializationError(Exception) :
-    def __init__(self, message, errors):
-        super().__init__(message)
+class TransformError(Exception):
+    pass
+
+
+class SerializationError(Exception):
+    pass
+
+
+class FileNameException(Exception):
+    pass
+
+
+class FileTypeException(object):
+    pass

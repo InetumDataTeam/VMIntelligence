@@ -81,12 +81,10 @@ def integration(filename, conn):
             hebergeur = "Azure"
             typeVM = "ProjetAzureDevops" if not str(ProjetAzureDevops) == "nan" else "VM"
             date = date + "-01"
-            print(VM, ProjetAzureDevops)
             VM = VM if not str(VM) == "nan" else ProjetAzureDevops
-            print(typeVM)
             insertion(conn, VM, CoutLicenceMS, CodeSyges, Client, cout, Projet, CP, CostCenter, hebergeur, typeVM, date)
 
-    elif "OCEANET" and ".xlsm" in filename and ".xlsm" in filename:
+    elif "OCEANET" in filename and ".xlsm" in filename:
         read_file = pd.read_excel(directory + separator + filename, sheet_name='VMEnvProjet',
                                   usecols=['VM', 'SYGES', 'Client', 'CoutGlobal', 'CoutLicenceMS', 'CP', 'Projet', 'CostCenter'])
         dict = read_file.to_dict(orient='split')
@@ -103,8 +101,10 @@ def integration(filename, conn):
     else:
         print("File not complient")
 
-# conn = connectPostgres("localhost", "guest", "tseug", "postgres")
-# conn = connectPostgres("localhost", "me", "secret", "mydb")
-#
-# for filename in os.listdir(directory):
-#     integration(filename)
+
+if __name__ == '__main__':
+    conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+    # conn = connectPostgres("localhost", "me", "secret", "mydb")
+
+    for filename in os.listdir(directory):
+        integration(filename, conn)

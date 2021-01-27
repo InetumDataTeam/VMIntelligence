@@ -1,7 +1,9 @@
-class Postgres_serializer :
-    def __init__(self):
+class Postgres_serializer:
+    def __init__(self, pwd, login, host, bdd_name):
+        self.pwd = pwd
+        self.bdd_name = bdd_name
+        self.login = login
+        self.host = host
+
+    def connect(self):
         pass
-    def add_pwd(self, pwd):
-        return self
-    def add_bdd_name(self, pwd):
-        return self
