@@ -88,6 +88,7 @@ def integration(filename, conn):
         read_file = pd.read_excel(directory + separator + filename, sheet_name='VMEnvProjet',
                                   usecols=['VM', 'SYGES', 'Client', 'CoutGlobal', 'CoutLicenceMS', 'CP', 'Projet', 'CostCenter'])
         dict = read_file.to_dict(orient='split')
+
         hebergeur = "OCEANET"
         typeVM = "VM"
         date = filename.split("OCEANET ")[1].replace(".xlsm", "") + "-01"

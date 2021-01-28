@@ -8,14 +8,14 @@ class Processed_line:
         self.content = item.get("content")
         self.content = self._construct_line()
 
-    def integrate(self, ctx, postgres_serializer):  # insertion des données
-        postgres_serializer
+    def integrate(self, postgres_serializer):  # insertion des données
+        postgres_serializer.insert(self.content)
 
     def get_values(self):
         return self.content
 
     def _construct_line(self):
-        _, func = self.type_file
+        _, _, func = self.type_file
         try:
             return func(self.content)
         except FuncNotCompliantException:

@@ -12,20 +12,20 @@ class TraitementAzure(Traitement):
         pass
 
 
-class TraitementOceanet(Traitement):
+class TraitementOT(Traitement):
     def init(self, data):
         pass
 
 
 @pytest.mark.parametrize(
-    "ctx, expected", [(Context("/Users/camillesaury/Documents/workspace/python/VMIntelligence/res", [("type1", TraitementAzure), ("type2", TraitementOceanet)]), [])]
+    "ctx, expected", [(Context("/Users/camillesaury/Documents/workspace/python/VMIntelligence/res", [("type1", TraitementAzure), ("type2", TraitementOT)]), [])]
 )
 def test_source(ctx, expected):
     assert len(source(ctx)) > 0
 
 
 @pytest.mark.parametrize(
-    "ctx, expected", [(Context("je/suis/un/", [("type1", TraitementAzure), ("type2", TraitementOceanet)]), [])]
+    "ctx, expected", [(Context("je/suis/un/", [("type1", TraitementAzure), ("type2", TraitementOT)]), [])]
 )
 def test_source_dir_error(ctx, expected):
     with pytest.raises(DirNotFoundException):

@@ -6,9 +6,9 @@ from content.my_file import My_file
 from content.exceptions import *
 
 
-# TODO
 def pipeline(item):
     # mettre en forme (ajouter la date,etc... formatter la ligne en gros)
+    # item = {"type_file":type_file,"content":content} (dict)
     return Processed_line(item).get_values()
 
 
@@ -17,9 +17,7 @@ def source(ctx):
     if not os.path.isdir(ctx.source_path):
         raise DirNotFoundException
     for file in ctx.source_path:
-        data.append(My_file(file, ctx.file_types).init())
+        myfile = My_file(file, ctx.file_types)
+        myfile.init()
+        data.extend(myfile.extract())
     return data
-
-
-def postgres_serializer(pwd, login, host, bdd_name):
-    return Postgres_serializer(pwd, login, host, bdd_name)

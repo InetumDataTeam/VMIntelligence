@@ -30,3 +30,10 @@ class FuncNotCompliantException(Exception):
         default_message = "Function not compliant or content is empty"
         if not args:
             super().__init__(default_message)
+
+
+class InsertionException(object):
+    def __init__(self, *args, **kwargs):
+        default_message = "Content inserted is not compliant"
+        if not args:
+            super().__init__(default_message)
