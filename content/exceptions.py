@@ -23,3 +23,10 @@ class DirNotFoundException(Exception):
         default_message = "The directory does not exists"
         if not args:
             super().__init__(default_message)
+
+
+class FuncNotCompliantException(Exception):
+    def __init__(self, *args, **kwargs):
+        default_message = "Function not compliant or content is empty"
+        if not args:
+            super().__init__(default_message)
