@@ -1,18 +1,17 @@
-from new.exceptions import FileNameException, FileTypeException
+from content.exceptions import FileNameException, FileTypeException
 import pandas as pd
 
 
-class my_file:
+class My_file:
     def __init__(self, filename, file_types):
         self.filename = filename
-        self.type = type
+        self.file_types = file_types
 
     def init(self):
-
         try:
-            self.validate_file_name()
-            self.validate_file_type()
-            return self.extract()
+            self.validate_file_name(self.filename)
+            type = self.validate_file_type(self.file_types)
+            return self.extract(type)
         except FileNameException:
             print("FileNameException: Filename not compliant")
         except FileTypeException:
@@ -25,10 +24,10 @@ class my_file:
             raise FileNameException
 
     def validate_file_type(self, file_types):
-        if self.type:
+        if file_types:  # verifier (regex,uppercase...)
             pass
         else:
             raise FileTypeException
 
-    def extract(self):
-        return pd.read_excel()  # extraire
+    def extract(self, type):
+        return pd.read_excel(),  # extraire
