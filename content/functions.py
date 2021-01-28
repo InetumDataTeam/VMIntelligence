@@ -14,8 +14,7 @@ def pipeline(item):
 
 def source(ctx):
     data = []
-    path = os.path.abspath(ctx.source_path)
-    if not os.path.isdir(path):
+    if not os.path.isdir(ctx.source_path):
         raise DirNotFoundException
     for file in ctx.source_path:
         data.append(My_file(file, ctx.file_types).init())

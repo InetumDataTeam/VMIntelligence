@@ -14,7 +14,7 @@ class FileNameException(Exception):
     pass
 
 
-class FileTypeException(object):
+class FileTypeException(Exception):
     pass
 
 
