@@ -1,6 +1,7 @@
 from content.exceptions import FileNameException, FileTypeException
 import pandas as pd
-
+import re
+from pathlib import Path
 
 class My_file:
     def __init__(self, filename, file_types):
@@ -19,13 +20,13 @@ class My_file:
             print("FileTypeException: Type is empty")
 
     def validate_file_name(self):
-        if self.filename:  # verifier (regex,uppercase...)
+        if Path(self.filename).suffix == '.xlsm':
             return True
         else:
             raise FileNameException
 
     def validate_file_type(self):
-        if self.file_types:  # verifier (regex,uppercase...)
+        if re.match("^.*.OCEANET.*", self.file_types) or re.match("^.*.Azure.*", self.file_types):
             return True
         else:
             raise FileTypeException
