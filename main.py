@@ -3,7 +3,6 @@ import pandas as pd
 from sqlalchemy import text
 from sqlalchemy import create_engine
 import warnings
-import pytest
 
 warnings.filterwarnings("ignore")
 directory = 'res'
@@ -14,7 +13,7 @@ separator = os.path.sep
 # Exception : integration
 # Connection : connectPostgres
 # Verifier dim avec es trucs pas vides : add_CP
-# container docker pour les tests
+# container init pour les tests
 
 def connectPostgres(host, user, passw, database):
     engine = create_engine(f"postgresql+psycopg2://{user}:{passw}@{host}:5432/{database}")
@@ -22,7 +21,7 @@ def connectPostgres(host, user, passw, database):
 
 
 def insertion(conn, VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
-    print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+    #print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
     # if not CoutLicenceMS :
     #   CoutLicenceMS = 0
 
@@ -92,10 +91,11 @@ def integration(filename, conn):
         hebergeur = "OCEANET"
         typeVM = "VM"
         date = filename.split("OCEANET ")[1].replace(".xlsm", "") + "-01"
+        print(date)
         for line in dict.get("data"):
             VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter = line
             if VM != "Total":
-                insertion(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+                insertion(conn,VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
             else:
                 break
             # TODO verif si ya pas de 'nan'
@@ -104,7 +104,7 @@ def integration(filename, conn):
 
 
 if __name__ == '__main__':
-    conn = connectPostgres("localhost", "guest", "tseug", "postgres")
+    conn = connectPostgres("localhost", "root", "root", "test_db")
     # conn = connectPostgres("localhost", "me", "secret", "mydb")
 
     for filename in os.listdir(directory):
