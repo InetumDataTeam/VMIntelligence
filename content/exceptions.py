@@ -11,11 +11,17 @@ class SerializationError(Exception):
 
 
 class FileNameException(Exception):
-    pass
+    def __init__(self, *args, **kwargs):
+        default_message = "Filename not compliant"
+        if not args:
+            super().__init__(default_message)
 
 
 class FileTypeException(Exception):
-    pass
+    def __init__(self, *args, **kwargs):
+        default_message = "Type is empty"
+        if not args:
+            super().__init__(default_message)
 
 
 class DirNotFoundException(Exception):
@@ -32,8 +38,9 @@ class FuncNotCompliantException(Exception):
             super().__init__(default_message)
 
 
-class InsertionException(object):
+class InsertionException(Exception):
     def __init__(self, *args, **kwargs):
         default_message = "Content inserted is not compliant"
         if not args:
             super().__init__(default_message)
+

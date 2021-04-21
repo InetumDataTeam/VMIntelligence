@@ -21,7 +21,7 @@ def connectPostgres(host, user, passw, database):
 
 
 def insertion(conn, VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date):
-    #print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+    # print(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
     # if not CoutLicenceMS :
     #   CoutLicenceMS = 0
 
@@ -95,7 +95,7 @@ def integration(filename, conn):
         for line in dict.get("data"):
             VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter = line
             if VM != "Total":
-                insertion(conn,VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
+                insertion(conn, VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
             else:
                 break
             # TODO verif si ya pas de 'nan'
