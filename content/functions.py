@@ -9,8 +9,6 @@ from content.exceptions import *
 
 
 def pipeline(item):
-    # mettre en forme (ajouter la date,etc... formatter la ligne en gros)
-    # item = {"type_file":type_file,"content":content} (dict)
     return Processed_line(item)
 
 

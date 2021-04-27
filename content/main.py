@@ -4,12 +4,8 @@ from content.context import Context
 from loguru import logger
 import pandas as pd
 from content.traitement import Traitement
-
-pwd = "postgres"
-bdd_name = "postgres"
-login = "postgres"
-host = "localhost"
-path = "./../res"
+import setuptools
+import click
 
 
 class TraitementAzure(Traitement):
@@ -39,21 +35,28 @@ class TraitementOT(Traitement):
             return None
 
 
-ctx = Context(source_path=path, file_types=[("azure", "VMAzure-Env-Projet", TraitementAzure), ("oceanet", "VMEnvProjet", TraitementOT)])
-postgres_serializer = Postgres_serializer(pwd, login, host, bdd_name).connect()
-it = None
+@click.command()
+@click.option("--pwd", help="Database Password")
+@click.option("--bdd_name", help="Database Name")
+@click.option("--login", help="Database Username")
+@click.option("--host", help="Database Server Host")
+@click.option("--path", help="Files Path")
+def main(pwd: str, bdd_name: str, login: str, host: str, path: str):
+    ctx = Context(source_path=path, file_types=[("azure", "VMAzure-Env-Projet", TraitementAzure), ("oceanet", "VMEnvProjet", TraitementOT)])
+    postgres_serializer = Postgres_serializer(pwd, login, host, bdd_name).connect()
+    it = None
 
-try:
-    it = source(ctx)
-except SourceError as e:
-    logger.error(e)
+    try:
+        it = source(ctx)
+    except SourceError as e:
+        logger.error(e)
 
-if it:
-    for item in it:
-        try:
-            processed_line = pipeline(item)
-            processed_line.integrate(postgres_serializer)
-        except TransformError as e:
-            logger.error(e)
-        except SerializationError as e:
-            logger.error(e)
+    if it:
+        for item in it:
+            try:
+                processed_line = pipeline(item)
+                processed_line.integrate(postgres_serializer)
+            except TransformError as e:
+                logger.error(e)
+            except SerializationError as e:
+                logger.error(e)

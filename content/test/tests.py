@@ -1,4 +1,3 @@
-from sqlalchemy.engine import Engine
 from sqlalchemy.exc import OperationalError
 
 from content.context import Context
