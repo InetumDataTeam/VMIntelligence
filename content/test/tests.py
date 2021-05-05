@@ -12,15 +12,10 @@ from content.traitement import Traitement
 class TraitementAzure(Traitement):
 
     def init(self, data, filename):
-        read_file_projets = pd.read_excel(filename, sheet_name='Projets', usecols=['NomProj', 'CP'])
-        VM, Projet_AzureDevOps, Projet, SYGES, CostCenter, Client, Mois, Cout = data[3], data[2], data[5], data[6], data[7], data[8], data[9], data[10]
+        VM, Projet_AzureDevOps, Projet, SYGES, CP, CostCenter, Client, Mois, Cout = data[3], data[2], data[5], data[6], data[7], data[8], data[9], data[10], data[11]
         typeVM = "ProjetAzureDevops" if not str(Projet_AzureDevOps) == "nan" else "VM"
         VM = VM if not str(VM) == "nan" else Projet_AzureDevOps
-        CP = ""
         date = Mois + "-01"
-        for c2 in read_file_projets.values:
-            if (data[5] == c2[0]) and str(c2[1]) != "nan":
-                CP = c2[1]
         return VM, 0, SYGES, Client, Cout, Projet, CP, CostCenter, "Azure", typeVM, date
 
 
@@ -124,8 +119,8 @@ def test_extract(filepath, type_files):
 
 def test_false_connect():
     with pytest.raises(OperationalError):
-        Postgres_serializer("coucou", "coucou", "localhost", "jesaispas").connect().engine.has_table("fait_cout")
+        Postgres_serializer("coucou", "coucou", "localhost", "5432", "jesaispas").connect().engine.has_table("fait_cout")
 
 
 def test_connect():
-    assert Postgres_serializer("postgres", "postgres", "localhost", "postgres").connect().engine.has_table("fait_cout")
+    assert Postgres_serializer("postgres", "postgres", "localhost", "5432", "postgres").connect().engine.has_table("fait_cout")

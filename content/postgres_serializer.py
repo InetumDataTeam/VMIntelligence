@@ -4,22 +4,21 @@ from content.exceptions import InsertionException
 
 
 class Postgres_serializer:
-    def __init__(self, pwd, login, host, bdd_name):
+    def __init__(self, pwd, login, host, port, bdd_name):
         self.pwd = pwd
         self.bdd_name = bdd_name
         self.login = login
         self.host = host
+        self.port = port
         self.engine = ""
 
     def connect(self):
-        self.engine = create_engine(f"postgresql+psycopg2://{self.login}:{self.pwd}@{self.host}:5432/{self.bdd_name}")
+        self.engine = create_engine(f"postgresql+psycopg2://{self.login}:{self.pwd}@{self.host}:{self.port}/{self.bdd_name}")
         return self
 
     def insert(self, content):
-
         if content is not None:
             VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date = content
-
             # logger.info(VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, hebergeur, typeVM, date)
 
             try:

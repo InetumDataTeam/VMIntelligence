@@ -5,22 +5,16 @@ services:
     image: postgres
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
+      POSTGRES_USER: vm_user
+      POSTGRES_PASSWORD: vmuser_1234
+      POSTGRES_DB: vmintelligence
     volumes:
-      - ./init/init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./init/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     expose:
       - "5432"
-    command: -p 5432
-  pgadmin:
-    container_name: pgadmin4_container
-    image: dpage/pgadmin4
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    ports:
-      - "5050:80"
+
+volumes:
+  pgdata:

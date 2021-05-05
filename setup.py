@@ -10,7 +10,7 @@ with io.open("./README.md") as f:
 
 setup(
     name='VMIntelligence',
-    version='1.0.1',
+    version='1.0.2',
     description='Remontees des cout des VM',
     packages=find_packages(exclude=('tests',)),
     long_description=readme,
