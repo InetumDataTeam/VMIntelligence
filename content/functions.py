@@ -1,7 +1,4 @@
 import os
-
-from loguru import logger
-
 from content.processed_line import Processed_line
 from content.postgres_serializer import Postgres_serializer
 from content.my_file import My_file
