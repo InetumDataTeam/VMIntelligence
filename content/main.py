@@ -8,7 +8,11 @@ import setuptools
 import click
 import time
 from watchdog.observers import Observer
-from watchdog.events import FileMovedEvent,FileModifiedEvent
+from watchdog.events import FileMovedEvent, FileModifiedEvent, PatternMatchingEventHandler
+import warnings
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
+
 
 class TraitementAzure(Traitement):
 
@@ -40,9 +44,36 @@ class TraitementOT(Traitement):
 @click.option("--port", help="Database Server Port")
 @click.option("--path", help="Files Path")
 def main(pwd: str, bdd_name: str, login: str, host: str, port: str, path: str):
-    ctx = Context(source_path=path, file_types=[("azure", "VMAzure-Env-Projet", TraitementAzure), ("oceanet", "VMEnvProjet", TraitementOT)])
     postgres_serializer = Postgres_serializer(pwd, login, host, port, bdd_name).connect()
+    patterns = ["*.xlsm"]
+    ignore_patterns = None
+    ignore_directories = False
+    case_sensitive = True
+    my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
+
+    def created(event):
+        run(path, postgres_serializer)
+        logger.info("RUN DONE")
+
+    my_event_handler.on_created = created
+    go_recursively = True
+    my_observer = Observer()
+    my_observer.schedule(my_event_handler, path, recursive=go_recursively)
+
+    my_observer.start()
+    try:
+        run(path, postgres_serializer)
+        logger.info("INIT RUN DONE")
+        while True:
+            time.sleep(30)
+    except KeyboardInterrupt:
+        my_observer.stop()
+        my_observer.join()
+
+
+def run(path, postgres_serializer):
     it = None
+    ctx = Context(source_path=path, file_types=[("azure", "VMAzure-Env-Projet", TraitementAzure), ("oceanet", "VMEnvProjet", TraitementOT)])
 
     try:
         it = source(ctx)
@@ -58,4 +89,3 @@ def main(pwd: str, bdd_name: str, login: str, host: str, port: str, path: str):
                 logger.error(e)
             except SerializationError as e:
                 logger.error(e)
-
