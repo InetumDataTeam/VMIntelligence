@@ -27,22 +27,22 @@ class TraitementAzure(Traitement):
 class TraitementOT(Traitement):
     def init(self, data, filename):
         date = filename.split("OCEANET ")[1].replace(".xlsm", "") + "-01"
-        VM, SYGES, Client, CoutGlobal, CoutLicenceMS, CP, Projet, CostCenter = data[0], data[16], data[17], data[19], data[15], data[24], data[23], data[25],
+        VM, SYGES, Client, CoutGlobalFinal, CoutLicenceMS, CP, Projet, CostCenter = data[0], data[16], data[17], data[22], data[15], data[24], data[23], data[25],
 
         if not VM == "Total" and not str(VM) == "nan" and not str(CoutLicenceMS) == "nan" and not str(SYGES) == "nan" and not str(Client) == "nan" and not str(
-                CoutGlobal) == "nan" and not str(Projet) == "nan" and not str(CP) == "nan" and not str(CostCenter) == "nan":
-            return VM, CoutLicenceMS, SYGES, Client, CoutGlobal, Projet, CP, CostCenter, "Oceanet", "VM", date
+                CoutGlobalFinal) == "nan" and not str(Projet) == "nan" and not str(CP) == "nan" and not str(CostCenter) == "nan":
+            return VM, CoutLicenceMS, SYGES, Client, CoutGlobalFinal, Projet, CP, CostCenter, "Oceanet", "VM", date
         else:
             return None
 
 
 @click.command()
-@click.option("--pwd", help="Database Password")
-@click.option("--bdd_name", help="Database Name")
-@click.option("--login", help="Database Username")
-@click.option("--host", help="Database Server Host")
-@click.option("--port", help="Database Server Port")
-@click.option("--path", help="Files Path")
+@click.option("--pwd", required=True, help="Database Password")
+@click.option("--bdd_name", required=True, help="Database Name")
+@click.option("--login", required=True, help="Database Username")
+@click.option("--host", required=True, help="Database Server Host")
+@click.option("--port", required=True, help="Database Server Port")
+@click.option("--path", required=True, help="Files Path")
 def main(pwd: str, bdd_name: str, login: str, host: str, port: str, path: str):
     postgres_serializer = Postgres_serializer(pwd, login, host, port, bdd_name).connect()
     patterns = ["*.xlsm"]
