@@ -14,7 +14,7 @@ class Postgres_serializer:
 
     def connect(self):
         print(self.port, self.host, self.login)
-        self.engine = create_engine(f"postgresql+psycopg2://vm_user:vmuser_1234@localhost:5432/vmintelligence")
+        self.engine = create_engine(f"postgresql+psycopg2://{self.login}:{self.pwd}@{self.host}:{self.port}/{self.bdd_name}")
         return self
 
     def insert(self, content):
