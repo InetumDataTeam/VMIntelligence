@@ -43,7 +43,7 @@ class TraitementOT(Traitement):
 @click.option("--host", required=True, help="Database Server Host")
 @click.option("--port", required=True, help="Database Server Port")
 @click.option("--path", required=True, help="Files Path")
-def main(pwd: str, bdd_name: str, login: str, host: str, port: int, path: str):
+def main(pwd: str, bdd_name: str, login: str, host: str, port: str, path: str):
     postgres_serializer = Postgres_serializer(pwd, login, host, port, bdd_name).connect()
     patterns = ["*.xlsm"]
     ignore_patterns = None

@@ -13,7 +13,8 @@ class Postgres_serializer:
         self.engine = ""
 
     def connect(self):
-        self.engine = create_engine(f"postgresql+psycopg2://{self.login}:{self.pwd}@{self.host}:{self.port}/{self.bdd_name}")
+        print(self.port, self.host, self.login)
+        self.engine = create_engine(f"postgresql+psycopg2://{self.login}:{self.pwd}@{self.host}:5432/{self.bdd_name}")
         return self
 
     def insert(self, content):
