@@ -6,6 +6,7 @@ if ! command -v python3.9 &>/dev/null; then
   apt-get install python3-pip -y
 fi
 if ! command -v docker &>/dev/null; then
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
   apt-get install docker-ce docker-ce-cli containerd.io
 fi
 
