@@ -4,5 +4,5 @@
 
 ```chmod 755 startup.sh```
 
-```startup.sh```
+```sudo startup.sh```
 
