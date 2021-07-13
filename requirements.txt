@@ -1,4 +1,5 @@
 wheel
+build
 pytest~=6.2.1
 SQLAlchemy~=1.3.22
 pandas==1.2.5
