@@ -16,10 +16,12 @@ if ! command -v docker-compose &>/dev/null; then
 fi
 
 pip3 install --no-cache-dir -r requirements.txt
-pip3 install --force-reinstall dist/VMIntelligence-1.0.2-py2.py3-none-any.whl
+rm -f dist/*.whl
+python3 -m build --wheel
+pip3 install --force-reinstall dist/*.whl
 
-sudo docker-compose up -d
+docker-compose up -d
 
-sudo vmintelligence --pwd "$vmintel_pwd" --bdd_name "$vmintel_bdd_name" --login "$vmintel_login" --host "$vmintel_host" --port "$vmintel_port" --path "$vmintel_path"
+vmintelligence --pwd "$vmintel_pwd" --bdd_name "$vmintel_bdd_name" --login "$vmintel_login" --host "$vmintel_host" --port "$vmintel_port" --path "$vmintel_path"
 
 # export vmintel_pwd=vmuser_1234 vmintel_bdd_name=vmintelligence vmintel_login=vm_user vmintel_host=localhost vmintel_port=5432 vmintel_path=/Users/camillesaury/Documents/workspace/python/VMIntelligence/res
