@@ -4,9 +4,9 @@
 Veuillez ajouter dans le fichier /etc/environment les variables suivantes :
  
 ```
-vmintel_pwd="vmuser_1234"
+vmintel_pwd="mdp_a_changer"
 vmintel_bdd_name="vmintelligence"
-vmintel_login="vm_user"
+vmintel_login="user_a_changer"
 vmintel_host="localhost"
 vmintel_path="/home/CLOUDASCO.world/daniel.adam/VMIntelligence/res"
 ```
